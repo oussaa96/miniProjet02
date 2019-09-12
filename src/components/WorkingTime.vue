@@ -3,9 +3,11 @@
 </template>
 
 <script>
-  export default {
-    name: 'WorkingTime'
-  }
+export default {
+  name: 'WorkingTime'
+
+}
+
 </script>
 
 <style scoped>
