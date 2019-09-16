@@ -11,15 +11,21 @@
               <input type="text" class="form-control" v-model="username">
               <strong>Description:</strong>
               <textarea class="form-control" v-model="email"></textarea>
+              <strong>firstname:</strong>
+              <input type="text" class="form-control" v-model="firstname">
+              <strong>lastname:</strong>
+              <input type="text" class="form-control" v-model="lastname">
+              <strong>password:</strong>
+              <input type="password" class="form-control" v-model="password">
+              <strong>id_role:</strong>
+              <input type="text" class="form-control" v-model="id_role">
 
               <button class="btn btn-success">Submit</button>
             </form>
-            <strong>Output:</strong>
-            <pre>
-                        {{output}}
-                        </pre>
           </div>
         </div>
+        <button  v-on:click="created">GET</button>
+        <p> {{email}} ------------ {{username}}</p>
       </div>
     </div>
   </div>
@@ -35,22 +41,46 @@ export default {
     return {
       username: '',
       email: '',
-      output: ''
+      password: '',
+      firstname: '',
+      lastname: '',
+      id_role: ''
     }
   },
   methods: {
+    created: function (event) {
+      this.axios.get(`http://localhost:3000/users/3`)
+        .then(response => {
+          // JSON responses are automatically parsed.
+          this.username = response.data.username
+          this.email = response.data.email
+          console.log(response)
+          console.log(response.data.username)
+          console.log(this.email + '------' + this.username)
+        })
+        .catch(e => {
+          this.errors.push(e)
+        })
+    },
     formSubmit (e) {
       e.preventDefault()
       let currentObj = this
-      this.axios.post('http://localhost:4000/api/users', {
-        username: this.username,
-        email: this.email,
-        useCredentails: true
+      this.axios.post('http://localhost:3000/users/', {
+        username: currentObj.username,
+        email: currentObj.email,
+        password: currentObj.password,
+        firstname: currentObj.firstname,
+        lastname: currentObj.lastname,
+        id_role: currentObj.id_role
+
       })
         .then(function (response) {
-          currentObj.output = response.data
+          console.log(response.user)
+          currentObj.output = response.user
         })
         .catch(function (error) {
+          console.log(currentObj.username)
+          console.log(error)
           currentObj.output = error
         })
     }
